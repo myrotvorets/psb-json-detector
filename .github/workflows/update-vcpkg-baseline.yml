@@ -27,10 +27,10 @@ jobs:
           BASELINE="$(git submodule status vcpkg | awk '{print $1}')"
           echo "baseline=${BASELINE}" >> ${GITHUB_OUTPUT}
 
-      - name: Update vcpkg-configuration.json
+      - name: Update vcpkg.json
         run: |
-          jq --arg baseline "${{ steps.vcpkg-baseline.outputs.baseline }}" '.["default-registry"].baseline = $baseline' vcpkg-configuration.json > tmp.$$.json && mv tmp.$$.json vcpkg-configuration.json
-          if ! git diff --quiet vcpkg-configuration.json; then
+          jq --arg baseline "${{ steps.vcpkg-baseline.outputs.baseline }}" '.["vcpkg-configuration"]["default-registry"].baseline = $baseline' vcpkg.json > tmp.$$.json && mv tmp.$$.json vcpkg.json
+          if ! git diff --quiet vcpkg.json; then
             echo "KEEP_GOING=yes" >> "${GITHUB_ENV}"
           fi
 
